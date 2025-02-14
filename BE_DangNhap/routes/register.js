@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const User = require('./model/user');
 
 const dotenv = require('dotenv');
-const { MongoClient, ServerApiVersion } = require('mongodb');
 
 dotenv.config();
 const uri = process.env.URI;
-const client = new MongoClient(uri);
+mongoose.connect(uri);
 
 const Register = async (req, res) => {
     const { username, password } = req.body;
@@ -62,4 +63,29 @@ router.get('/', (req, res) => {
     });
 
 module.exports = router;
+
+
+
+// Connect to MongoDB
+
+
+// Insert books into the database
+const books = [
+  { title: "The Catcher in the Rye", author: "J.D. Salinger", year: 1951 },
+  { title: "To Kill a Mockingbird", author: "Harper Lee", year: 1960 },
+  { title: "1984", author: "George Orwell", year: 1949 },
+  { title: "The Great Gatsby", author: "F. Scott Fitzgerald", year: 1925 },
+  { title: "Pride and Prejudice", author: "Jane Austen", year: 1813 }
+];
+
+// Insert multiple documents (books) into the collection
+Book.insertMany(books)
+  .then(() => {
+    console.log('Books inserted successfully');
+    mongoose.connection.close(); // Close the connection after insertion
+  })
+  .catch((err) => {
+    console.error('Error inserting books:', err);
+    mongoose.connection.close(); // Close the connection on error
+  });
   

@@ -41,6 +41,10 @@ app.use(express.json())
 app.use('/login', auth);
 app.use('/register', register);
 
+app.get('/', (req, res) =>{
+  res.send("ReactJS + ExpressJS + MongoDB");
+})
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
