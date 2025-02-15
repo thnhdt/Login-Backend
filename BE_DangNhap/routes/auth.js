@@ -14,6 +14,7 @@ const Login = async (req, res) => {
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
+        //   req.session.user = { username };
           return res.status(200).json({ message: "Login thành công" });
       } else {
           return res.status(401).json({ message: "Login thất bại" });
@@ -30,3 +31,4 @@ router.get('/', (req, res) => {
     });
 
 module.exports = router;
+// module.exports = { requireAuth };
