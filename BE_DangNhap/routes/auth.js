@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const User = require('../model/user');
+const { createClient } = require('redis');
+const client = createClient();
+
+client.connect().catch(console.error);
 
 const Login = async (req, res) => {
   const { username, password } = req.body;
@@ -14,8 +19,10 @@ const Login = async (req, res) => {
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (isMatch) {
-        //   req.session.user = { username };
-          return res.status(200).json({ message: "Login thành công" });
+          const sessionId = crypto.randomBytes(16).toString('hex');
+          await client.set(`session:${sessionId}`, JSON.stringify({ username }), 'EX', 3600);
+          res.cookie('sessionId', sessionId, { httpOnly: true, secure: false });
+          return res.status(200).json({ message: "Login thành công", sessionId });
       } else {
           return res.status(401).json({ message: "Login thất bại" });
       }
