@@ -2,14 +2,12 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-const { createClient } = require("redis");
-const { createAdapter } = require("@socket.io/redis-adapter");
-
+const { createClient } = require('redis');
 const Rclient = createClient();
-const subClient = Rclient.duplicate();
 Rclient.on('error', err => console.log('Redis Client Error', err));
+Rclient.connect()
+  .then(() => console.log('Connected to Redis'))
+  .catch(err => console.log('Failed to connect to Redis', err));
 
 const auth = require('./routes/auth');
 const register = require('./routes/register');
@@ -19,30 +17,6 @@ const dotenv = require('dotenv');
 const connectDB = require('./model/db');
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
-    cors: {
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
-
-Promise.all([Rclient.connect(), subClient.connect()]).then(() => {
-    io.adapter(createAdapter(Rclient, subClient));
-
-    io.on("connection", (socket) => {
-        console.log(`Client connected: ${socket.id}`);
-        socket.on("message", (msg) => {
-            console.log(`Received: ${msg}`);
-            io.emit("message", msg);
-        });
-
-        socket.on("disconnect", () => {
-            console.log(`Client disconnected: ${socket.id}`);
-        });
-    });
-});
 
 dotenv.config();
 const PORT = process.env.PORT || 3001;
@@ -71,6 +45,6 @@ app.get('/', (req, res) => {
     res.send("ReactJS + ExpressJS + MongoDB");
 });
 
-httpServer.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -17,9 +17,7 @@ const session = require('express-session');
 
 router.use(session({
   store: redisStore,
-  secret: '123',
-  resave: false,
-  saveUninitialized: true
+  secret: '123'
 }))
 
 const Login = async (req, res) => {
@@ -54,3 +52,15 @@ router.get('/', (req, res) => {
     });
 
 module.exports = router;
+// module.exports = { requireAuth };
+
+
+//   /api->local
+//redis session save
+//redis luon`
+//config
+// goi. app.database.redis ....
+//cookie n session
+//stm?
+
+//axios

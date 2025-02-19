@@ -10,7 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@socket.io/redis-adapter": "^8.3.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -20,10 +19,7 @@
     "mongodb": "^6.13.0",
     "mongoose": "^8.10.0",
     "nodemon": "^3.1.9",
-    "redis": "^4.7.0",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "socket.io-redis": "^5.4.0"
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "connect-redis": "^8.0.1"
