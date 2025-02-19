@@ -15,7 +15,7 @@ const Register = async (req, res) => {
 
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password, salt);
-        const newUser = new User({ username, password: hashedPassword });
+        const newUser = new User({ username, password: hashedPassword});
         await newUser.save();
         res.status(201).json({ message: "Đăng ký thành công" });
 

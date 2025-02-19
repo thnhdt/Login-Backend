@@ -14,6 +14,7 @@ Rclient.on('error', err => console.log('Redis Client Error', err));
 const auth = require('./routes/auth');
 const register = require('./routes/register');
 const info = require('./routes/info');
+// const send = require('./routes/send');
 
 const dotenv = require('dotenv');
 const connectDB = require('./model/db');
@@ -66,6 +67,7 @@ app.use(express.json());
 app.use('/api/login', auth);
 app.use('/api/register', register);
 app.use('/api/info', info);
+// app.use('/api/send', send);
 
 app.get('/', (req, res) => {
     res.send("ReactJS + ExpressJS + MongoDB");

@@ -7,3 +7,6 @@
     -cd D
     -npm i
     -npm run dev?
+
+3. Run redis:
+    -Redis insight localhost:8001
