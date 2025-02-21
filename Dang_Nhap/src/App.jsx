@@ -2,8 +2,8 @@ import { useState } from 'react';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter, Routes, Route, useLocation} from 'react-router-dom';
-import { LoginHeader, AppHeader } from './components/Header';
-import AppFooter from './components/Footer';
+// import { LoginHeader, AppHeader } from './components/Header';
+// import AppFooter from './components/Footer';
 
 import Main from './routes/Main'
 import Login from './routes/Login';
@@ -11,6 +11,7 @@ import Register from './routes/Register';
 import User from './routes/User';
 import UserInfo from './routes/UserInfo';
 import NotFound from './routes/NotFound';
+import Screen from './routes/Screen';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/register" element={<Register/>}/>
         <Route path="/user" element={<User/>}/>
         <Route path="/userInfo" element={<UserInfo/>}/>
+        <Route path="/screen" element={<Screen />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </main>
@@ -49,26 +51,28 @@ function App() {
 export default App
 
 //nn phi cấu trúc -> no shemema//instance
-
-//model control view -> tạo 1 model cho DB // instance n schemema -> tạo module? !!
-//model và component
+//socket làm gì ?
 
 //vite config vite + eslint
 //config js
 
+//screen
+//rabbit mq
+// to
 
 
 //Tạm:
 //socket io redis client
+
 //new: proxy
 // tránh cors + ẩn IP thực
 //   /api->local
-// 
-// 
 // new:/ alias cho đường dẫn// tách vendor
 //
+// model control view -> tạo 1 model cho DB // instance n schemema -> tạo module? !!
+// model và component
 // 
-// //
+//
 // cookie n session 
 // cookie: nhỏ, nhớ trạng thái đăng nhập, giỏ hàng, hành vi ....
 // -> trên trình duyệt -> dc lưu, cài tgian đóng
@@ -100,6 +104,10 @@ export default App
 //
 // const app = express();
 // const httpServer = createServer(app);
+
+
+
+
 // const redisStore = new RedisStore({
 //   client,
 //   prefix: 'login-app:'

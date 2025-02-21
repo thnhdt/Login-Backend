@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css'
 import io from 'socket.io-client';
-// import amqp from 'amqplib/callback_api';
 
-function User() {
+function Screen() {
   const [usermessage, setUsermessage] = useState(null);
+  const [socketmessages, setSocketmessages] = useState([]);
   const [username, setUsername] = useState(null);
   const [error, setError] = useState(null);
   const [socket, setSocket] = useState(null);
@@ -53,34 +53,26 @@ function User() {
 
   return (
     <>
-      <h1>Xin Chào {username} </h1>
+      <h1> Thông báo </h1>
         <div>
-          <Link to="/Screen">
-          <div className="login-box">
-                <button> Thông báo chung </button>
-            </div>
-          </Link>
-          <Link to="/userInfo">
-            <div className="login-box">
-                <button> Thông tin </button>
-            </div>
-          </Link>
+          <ul>
+            {socketmessages.map((msg, index) => (
+              <li key={index}>{msg}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
           <Link to="/">
           <div className="login-box">
                 <button> Về trang chủ </button>
             </div>
           </Link>
         </div>
-        <div>
-          <input type="text" placeholder="Chat ở đây" onChange={(e) => setUsermessage(e.target.value)} /><br />
-        </div>
-        <div className="login-box">
-          <button onClick={send}>
-            Gửi
-          </button>
-        </div>
     </>
   );
 }
 
-export default User;
+export default Screen;
+
+//screen
+//rabbit mq
