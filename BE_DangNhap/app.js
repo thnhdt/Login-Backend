@@ -23,7 +23,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "http://localhost:5001",
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -51,7 +51,7 @@ const PORT = process.env.PORT || 3001;
 connectDB();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5001',
     credentials: true
 }));
 
