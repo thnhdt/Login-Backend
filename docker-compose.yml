@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: 
+      context: ./Dang_Nhap
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    env_file:
+      - Dang_Nhap/.env.docker
+    depends_on:
+      - backend
+    volumes:
+      - ./Dang_Nhap:/app
+      - /app/node_modules
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./BE_DangNhap
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - BE_DangNhap/.env
+    entrypoint: ["node", "app.js" ]
+    depends_on:
+      - redis
+      - rabbitmq
+    volumes:
+      - ./BE_DangNhap:/app
+      - /app/node_modules
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis/data:/root/redis
+      - ./volumes/redis/local/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data: 
+
+networks:
+  app-network:
+    driver: bridge

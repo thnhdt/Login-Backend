@@ -2,19 +2,41 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 
+//socket io-http server + redis
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { createClient } = require("redis");
 const { createAdapter } = require("@socket.io/redis-adapter");
 
-const Rclient = createClient();
-const subClient = Rclient.duplicate();
-Rclient.on('error', err => console.log('Redis Client Error', err));
+// // Khởi tạo RabbitMQ connections
+// async function initializeRabbitMQ() {
+//     await initProducer();
+//     await initConsumer();
+// }
+
+// initializeRabbitMQ();
+
+// setInterval(() => {
+//     const message = { 
+//         orderId: Math.floor(Math.random() * 1000), 
+//         product: "Laptop", 
+//         quantity: 2 
+//     };
+//     sendMessage(message);
+// }, 5000);
+
+
+const redisClient = createClient({
+  url: 'redis://redis:6379'  // Sử dụng tên service làm hostname
+});
+const subClient = redisClient.duplicate();
+redisClient.on('error', err => console.log('Redis Client Error', err));
 
 const auth = require('./routes/auth');
 const register = require('./routes/register');
 const info = require('./routes/info');
-// const send = require('./routes/send');
+const send = require('./routes/send');
+const receive = require('./routes/receive');
 
 const dotenv = require('dotenv');
 const connectDB = require('./model/db');
@@ -29,14 +51,31 @@ const io = new Server(httpServer, {
     }
 });
 
-Promise.all([Rclient.connect(), subClient.connect()]).then(() => {
-    io.adapter(createAdapter(Rclient, subClient));
+const connectRedis = async () => {
+  const maxRetries = 5;
+  const retryDelay = 5000; // 5 seconds
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      await redisClient.connect();
+      console.log('Connected to Redis successfully');
+      return;
+    } catch (error) {
+      console.log(`Failed to connect to Redis (attempt ${i + 1}/${maxRetries})`);
+      if (i === maxRetries - 1) throw error;
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
+    }
+  }
+};
+
+Promise.all([connectRedis().catch(console.error), subClient.connect()]).then(() => {
+    io.adapter(createAdapter(redisClient, subClient));
 
     io.on("connection", (socket) => {
         console.log(`Client connected: ${socket.id}`);
-        socket.on("message", (msg) => {
-            console.log(`Received: ${msg}`);
-            io.emit("message", msg);
+        socket.on("Rmessage", (msg) => {
+            console.log(`R-Received: ${msg}`);
+            io.emit("Rmessage", msg);
         });
 
         socket.on("disconnect", () => {
@@ -67,12 +106,13 @@ app.use(express.json());
 app.use('/api/login', auth);
 app.use('/api/register', register);
 app.use('/api/info', info);
-// app.use('/api/send', send);
+app.use('/api/send', send);
+app.use('/api/receive', receive);
 
 app.get('/', (req, res) => {
     res.send("ReactJS + ExpressJS + MongoDB");
 });
 
-httpServer.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+httpServer.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on http://0.0.0.0:${PORT}`);
 });

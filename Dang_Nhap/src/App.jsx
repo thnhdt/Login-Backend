@@ -12,6 +12,7 @@ import User from './routes/User';
 import UserInfo from './routes/UserInfo';
 import NotFound from './routes/NotFound';
 import Screen from './routes/Screen';
+import Chat from './routes/Chat';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/user" element={<User/>}/>
         <Route path="/userInfo" element={<UserInfo/>}/>
         <Route path="/screen" element={<Screen />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </main>
@@ -51,18 +53,66 @@ function App() {
 export default App
 
 //nn phi cấu trúc -> no shemema//instance
-//socket làm gì ?
+
+// react component life cycle
+// class component, functional component
+//UseState ->
+//UseEffect -> dependancy, effect chạy sau moi render
+// axios
+
+//ưu tiên: 
+//docker compose
+//eslint + nodemon
+
 
 //vite config vite + eslint
 //config js
+//websocket
+//server send event
+//long polling
+//ajax
 
-//screen
-//rabbit mq
-// to
 
+//TO DO:
+// rabbitmq -->socket io
+// -> admin -> init Producer /// vào hs thì -> Consumer /// ->>
+// 
+//
+//rabbit mq + socket io nodejs
+// tạo backend to backend rabbitmq + 1 backend to frontend rabbitmq -> socket.io
+//kết nối
+//flow: Client gửi đơn hàng → RabbitMQ xử lý.
+//Khi đơn hàng hoàn tất → RabbitMQ gửi tin nhắn đến Socket.IO.
+//Socket.IO gửi thông báo real-time đến người dùng.
+
+//vid!!!
 
 //Tạm:
 //socket io redis client
+//screen: noti all in 1 site srceen -> how to keep noti -> in db {!!)
+// socket:
+//main: emit: phát -- on: handle
+// get to 1 room: docs:
+// https://socket.io/docs/v3/emit-cheatsheet/
+
+//DONE: (maibui)
+//rabbitmq vs socket io
+//message queue --- realtime + thông báo
+// message queuing and delivery guarentees --- live sth
+
+//-> tạo producer + consumer rabbitMQ
+//producer -> tạo
+//exchange:
+//fanout: tất cả queue
+//direct: 1 queue routing key
+//topic: dựa trên pattern matching
+//header: dựa trên header của request
+//queue:
+//có thể cấu hình durable (bền vững) || xóa
+//consumer -> nhận
+//pull mode:tự động kiểm tra
+//push mode: rabbit gửi ngay khi sẵn sàng
+
 
 //new: proxy
 // tránh cors + ẩn IP thực

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../App.css'
 import io from 'socket.io-client';
-// import amqp from 'amqplib/callback_api';
+
 
 function User() {
   const [usermessage, setUsermessage] = useState(null);
@@ -65,6 +65,11 @@ function User() {
                 <button> Thông tin </button>
             </div>
           </Link>
+          <Link to="/chat">
+          <div className="login-box">
+                <button> Chat </button>
+            </div>
+          </Link>
           <Link to="/">
           <div className="login-box">
                 <button> Về trang chủ </button>
@@ -72,7 +77,7 @@ function User() {
           </Link>
         </div>
         <div>
-          <input type="text" placeholder="Chat ở đây" onChange={(e) => setUsermessage(e.target.value)} /><br />
+          <input type="text" placeholder="Thông báo ở đây" onChange={(e) => setUsermessage(e.target.value)} /><br />
         </div>
         <div className="login-box">
           <button onClick={send}>

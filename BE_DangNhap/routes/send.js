@@ -1,11 +1,38 @@
-const io = require("socket.io-client");
-const socket = io("http://localhost:3000", { withCredentials: true });
+const express = require('express');
+const router = express.Router();
+const { initProducer, sendMessage } = require('../rabbitmq/producer');
 
-socket.on("connect", () => {
-    console.log("Connected to server:", socket.id);
-    socket.emit("message", "Hello from Node.js client 1!");
-});
+let init = false;
 
-socket.on("message", (msg) => {
-    console.log("Received:", msg);
-});
+const initializeProducer = async () => {
+  if (!init) {
+    await initProducer();
+    init = true;
+  }
+};
+
+const Send = async (req, res) => {
+  try {
+    const { sender, receiver, message } = req.body;
+    
+    if (!sender || !receiver || !message) {
+      return res.status(400).json({ message: 'All field are required' });
+    }
+
+    await initializeProducer();
+    await sendMessage({
+      sender: sender,
+      receiver: receiver,
+      message: message
+    });
+
+    res.status(200).json({ message: 'Message sent successfully' });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ message: 'Error sending message' });
+  }
+};
+
+router.post('/', Send);
+
+module.exports = router;

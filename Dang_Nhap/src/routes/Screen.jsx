@@ -26,7 +26,7 @@ function Screen() {
     return () => {
       newSocket.disconnect();
     };
-  }, []); 
+  }, [username]); 
 
   function send() {
     if (socket) {
@@ -73,6 +73,3 @@ function Screen() {
 }
 
 export default Screen;
-
-//screen
-//rabbit mq
