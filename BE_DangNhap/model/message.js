@@ -1,26 +1,28 @@
-const mongoose = require('mongoose');
+const { Sequelize, DataTypes } = require("sequelize");
+const sequelize = new Sequelize("postgres", "postgres", "thnhdt", {
+    host: "db.disswnqpbzsaxxybflxo.supabase.co",
+    dialect: "postgres",
+    port: 5432,
+    logging: false,
+  });
 
-const messageSchema = new mongoose.Schema({
+const Message = sequelize.define("Message", {
     sender: {
-        type: String,
-        required: true,
-        ref: 'User',
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     receiver: {
-        type: String,
-        required: true,
-        ref: 'User'
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     message: {
-        type: String,
-        required: true
+        type: DataTypes.STRING,
+        required: true,
     },
-    timestamp: {
-        type: Date,
-        default: Date.now
-    }
+},{
+    timestamps: true,  // Tự động thêm `createdAt` và `updatedAt`
 });
 
-module.exports = mongoose.model('Message', messageSchema);
+sequelize.sync({alter: true});
 
-  
+module.exports = Message;

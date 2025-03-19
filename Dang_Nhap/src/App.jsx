@@ -58,10 +58,11 @@ export default App
 // class component, functional component
 //UseState ->
 //UseEffect -> dependancy, effect chạy sau moi render
-// axios
+//axios
 
-//ưu tiên: 
-//docker compose
+//local Storage + Cookie + React-redux
+//JWT token -> HttlOnly Cookie
+
 //eslint + nodemon
 
 
@@ -72,8 +73,26 @@ export default App
 //long polling
 //ajax
 
+//triển khai Postgre ->docker?
+
+//cơ chế đồng bộ
+// dev -> dùng sequelize.sync()
+//  (dùng migration) trong sequelize:
+// ->> thay đổi schema 
+// //
+
 
 //TO DO:
+// sequelize:
+// tạo + định nghĩa model
+// tạo migration
+// testing / staging
+// -> production
+// seed dữ liệu
+//
+// up: cập nhật && down rollback
+// sequelize cho phép define, mở rộng, kế thừa linh hoạt
+// 
 // rabbitmq -->socket io
 // -> admin -> init Producer /// vào hs thì -> Consumer /// ->>
 // 
@@ -85,9 +104,13 @@ export default App
 //Khi đơn hàng hoàn tất → RabbitMQ gửi tin nhắn đến Socket.IO.
 //Socket.IO gửi thông báo real-time đến người dùng.
 
-//vid!!!
-
 //Tạm:
+// docker compose
+//build dockerfile
+//env
+//dependency..
+//F1 -> docker:add
+
 //socket io redis client
 //screen: noti all in 1 site srceen -> how to keep noti -> in db {!!)
 // socket:

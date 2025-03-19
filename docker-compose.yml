@@ -29,11 +29,15 @@ services:
     depends_on:
       - redis
       - rabbitmq
+      - postgres
     volumes:
       - ./BE_DangNhap:/app
       - /app/node_modules
     networks:
       - app-network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
   redis:
     image: redis:alpine
@@ -55,6 +59,19 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: thnhdt
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
     networks:
       - app-network
 

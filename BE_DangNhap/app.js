@@ -1,13 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
+// Initial
 
 //socket io-http server + redis
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { createClient } = require("redis");
 const { createAdapter } = require("@socket.io/redis-adapter");
-
+{
 // // Khởi tạo RabbitMQ connections
 // async function initializeRabbitMQ() {
 //     await initProducer();
@@ -24,10 +25,9 @@ const { createAdapter } = require("@socket.io/redis-adapter");
 //     };
 //     sendMessage(message);
 // }, 5000);
-
-
+}
 const redisClient = createClient({
-  url: 'redis://redis:6379'  // Sử dụng tên service làm hostname
+  // url: 'redis://redis:6379'  // Sử dụng tên service làm hostname khi dùng docker
 });
 const subClient = redisClient.duplicate();
 redisClient.on('error', err => console.log('Redis Client Error', err));
@@ -37,9 +37,26 @@ const register = require('./routes/register');
 const info = require('./routes/info');
 const send = require('./routes/send');
 const receive = require('./routes/receive');
-
 const dotenv = require('dotenv');
-const connectDB = require('./model/db');
+// const connectDB = require('./model/db');
+dotenv.config();
+const PORT = process.env.PORT || 3001;
+const { Sequelize } = require("sequelize");
+const sequelize = new Sequelize("postgres", "postgres", "thnhdt", {
+  host: "db.disswnqpbzsaxxybflxo.supabase.co",
+  dialect: "postgres",
+  port: 5432,
+  logging: false,
+});
+
+(async () => {
+  try {
+      await sequelize.authenticate();
+      console.log("✅ Kết nối thành công!");
+  } catch (error) {
+      console.error("❌ Lỗi kết nối:", error);
+  }
+})();
 
 const app = express();
 const httpServer = createServer(app);
@@ -83,11 +100,6 @@ Promise.all([connectRedis().catch(console.error), subClient.connect()]).then(() 
         });
     });
 });
-
-dotenv.config();
-const PORT = process.env.PORT || 3001;
-
-connectDB();
 
 app.use(cors({
     origin: 'http://localhost:5001',

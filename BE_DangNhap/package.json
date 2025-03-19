@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "@socket.io/redis-adapter": "^8.3.0",
+    "@supabase/supabase-js": "^2.49.1",
     "amqplib": "^0.10.5",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
@@ -21,7 +22,10 @@
     "mongodb": "^6.13.0",
     "mongoose": "^8.10.0",
     "nodemon": "^3.1.9",
+    "pg": "^8.14.1",
+    "pg-hstore": "^2.3.4",
     "redis": "^4.7.0",
+    "sequelize": "^6.37.6",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "socket.io-redis": "^5.4.0"

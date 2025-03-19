@@ -5,7 +5,11 @@ const User = require('../model/user');
 const Info = async (req, res) => {
   if(req.session.user){
     const username = req.session.user.username;
-    const user = await User.findOne({username});
+    const user = await User.findOne({
+      where: {
+        username: username,
+      },
+    });
     res.send({user});
   }
   else{
@@ -21,7 +25,11 @@ router.post('/', async (req, res) => {
   const { name, address, phone_num, email } = req.body;
   try { 
     const username = req.session.user.username;
-    const user = await User.findOne({username});
+    const user = await User.findOne({
+      where: {
+        username: username,
+      },
+    });
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

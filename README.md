@@ -4,10 +4,14 @@ Docker compose:
         docker-compose down 
     build:
         docker-compose up --build -d
-    test network:
-        docker network ls
-    check logs:
-        docker-compose logs < container name >
+
+additional:
+test network:
+    docker network ls
+check logs:
+    docker-compose logs < container name >
+add new docker file:
+    F1 -> docker:add
     
 
 OLD:
@@ -23,6 +27,8 @@ OLD:
 
 3. Run redis:
     - Redis insight localhost:8001
+    -  docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0-management
+    docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
 
 
 4. Run RabbitMQ:

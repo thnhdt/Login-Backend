@@ -8,7 +8,11 @@ const Register = async (req, res) => {
     if (username === "" || password === "") return res.status(400).json({ message: "Chưa nhập đủ thông tin" });
 
     try {
-        const existingUser = await User.findOne({ username });
+        const existingUser = await User.findOne({
+            where: {
+              username: username,
+            },
+          });
         if (existingUser) {
             return res.status(400).json({ message: "Người dùng đã tồn tại" });
         }
