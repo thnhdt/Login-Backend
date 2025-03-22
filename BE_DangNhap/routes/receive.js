@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { initConsumer } = require('../rabbitmq/consumer');
-const Message = require('../model/message');
+const db = require('../models');
+const Message = db.Message;
 
 let init = false;
 

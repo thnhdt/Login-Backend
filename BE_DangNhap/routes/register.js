@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const User = require('../model/user');
+const db = require('../models');
+const User = db.User;
 
 const Register = async (req, res) => {
     const { username, password } = req.body;
@@ -25,7 +26,7 @@ const Register = async (req, res) => {
 
     } catch (error) {
         console.error('Error', error);
-        res.status(500).json({ message: "Error" });
+        res.status(500).json({ message: "Error", details: error.message });
     }
 }
 

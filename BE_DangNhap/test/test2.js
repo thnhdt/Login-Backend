@@ -50,3 +50,51 @@ socket.on('reconnect', function() {
 socket.on('reconnecting', function() {
     console.log('reconnecting');
 });
+
+
+'use strict';
+const {
+  Model
+} = require('sequelize');
+
+module.exports = (sequelize, DataTypes) => {
+class User extends Model {
+    getFullName() {
+        return `${this.firstName} ${this.lastName}`;
+      }
+}
+User.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+      },
+      address: {
+        type: DataTypes.STRING,
+      },
+      phone_num: {
+        type: DataTypes.STRING,
+      },
+      email: {
+        type: DataTypes.STRING,
+      },
+}, {
+  sequelize, // Kết nối đến database
+  modelName: "User", // Tên Model
+  timestamps: true,
+});
+
+return User;
+};

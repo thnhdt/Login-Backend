@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const User = require('../model/user');
+const db = require('../models');
+const User = db.User;
 const { createClient } = require('redis');
 const client = createClient();
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../model/user');
+const db = require('../models');
+const User = db.User;
 
 const Info = async (req, res) => {
   if(req.session.user){

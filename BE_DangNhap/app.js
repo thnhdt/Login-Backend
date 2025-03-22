@@ -42,7 +42,9 @@ const dotenv = require('dotenv');
 dotenv.config();
 const PORT = process.env.PORT || 3001;
 const { Sequelize } = require("sequelize");
+// const sequelize = new Sequelize(process.env.POSTGRES_URI);
 const sequelize = new Sequelize("postgres", "postgres", "thnhdt", {
+  // host: "postgres",
   host: "db.disswnqpbzsaxxybflxo.supabase.co",
   dialect: "postgres",
   port: 5432,
@@ -52,9 +54,9 @@ const sequelize = new Sequelize("postgres", "postgres", "thnhdt", {
 (async () => {
   try {
       await sequelize.authenticate();
-      console.log("✅ Kết nối thành công!");
+      console.log("Kết nối thành công Sequelize!");
   } catch (error) {
-      console.error("❌ Lỗi kết nối:", error);
+      console.error("Lỗi kết nối Sequelize:", error);
   }
 })();
 
@@ -128,3 +130,7 @@ app.get('/', (req, res) => {
 httpServer.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on http://0.0.0.0:${PORT}`);
 });
+
+
+//ket noi docker -> supabase?
+//asssocition
