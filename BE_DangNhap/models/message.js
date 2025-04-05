@@ -20,16 +20,24 @@ class Message extends Model {
 }
 Message.init({
     sender: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
     },
     receiver: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+            model: 'Users',
+            key: 'id'
+        }
     },
     message: {
         type: DataTypes.STRING,
-        required: true,
+        allowNull: false,
     },
     },{
         sequelize,

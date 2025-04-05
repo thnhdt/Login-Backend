@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { initProducer, sendMessage } = require('../rabbitmq/producer');
+const db = require('../models');
+const Message = db.Message;
 
 let init = false;
 
@@ -18,7 +20,8 @@ const Send = async (req, res) => {
     if (!sender || !receiver || !message) {
       return res.status(400).json({ message: 'All field are required' });
     }
-
+    // luu o consumer
+    // await Message.create({ sender, receiver, message });
     await initializeProducer();
     await sendMessage({
       sender: sender,

@@ -24,7 +24,7 @@ function Chat() {
     return () => {
       newSocket.disconnect();
     };
-  }, []); 
+  }); 
 
   const fetchUsername = async () => {
     try {

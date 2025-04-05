@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { initConsumer } = require('../rabbitmq/consumer');
 const db = require('../models');
+const { where } = require('sequelize');
 const Message = db.Message;
 
 let init = false;
@@ -25,9 +26,11 @@ const initializeConsumer = async () => {
 router.get('/:receiver', async (req, res) => {
     await initializeConsumer();
     try {
-        const { receiver } = req.query;
-        const query = receiver ? { receiver } : {};
-        const messages = await Message.find(query);          
+        const { receiver } = req.params;
+        //get from User
+        const messages = await Message.findAll({
+            where: {receiver: receiver},
+        });          
         res.status(200).json({ messages });
     } catch (error) {
         console.error('Error receiving messages:', error);
@@ -39,8 +42,10 @@ router.get('/:receiver/:sender', async (req, res) => {
     try {
         await initializeConsumer();
         const { sender, receiver } = req.params;
-        const query = { sender, receiver };
-        const messages = await Message.find(query);          
+        //get from User
+        const messages = await Message.findAll({
+            where: {receiver: receiver, sender: sender},
+        });          
         res.status(200).json({ messages });
     } catch (error) {
         console.error('Error receiving messages:', error);

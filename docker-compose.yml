@@ -1,6 +1,35 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./volumes/redis/data:/root/redis
+      - ./volumes/redis/local/redis.conf:/usr/local/etc/redis/redis.conf
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  postgres:
+    image: postgres:latest
+    container_name: my_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: thnhdt
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+
   frontend:
     build: 
       context: ./Dang_Nhap
@@ -14,8 +43,6 @@ services:
     volumes:
       - ./Dang_Nhap:/app
       - /app/node_modules
-    networks:
-      - app-network
 
   backend:
     build:
@@ -33,51 +60,3 @@ services:
     volumes:
       - ./BE_DangNhap:/app
       - /app/node_modules
-    networks:
-      - app-network
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
-
-  redis:
-    image: redis:alpine
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./volumes/redis/data:/root/redis
-      - ./volumes/redis/local/redis.conf:/usr/local/etc/redis/redis.conf
-    networks:
-      - app-network
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    networks:
-      - app-network
-
-  postgres:
-    image: postgres:latest
-    container_name: my_postgres
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: thnhdt
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - app-network
-
-volumes:
-  mongodb_data: 
-
-networks:
-  app-network:
-    driver: bridge
