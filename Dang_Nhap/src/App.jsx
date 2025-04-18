@@ -13,6 +13,7 @@ import UserInfo from './routes/UserInfo';
 import NotFound from './routes/NotFound';
 import Screen from './routes/Screen';
 import Chat from './routes/Chat';
+import Room from './routes/Room';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/userInfo" element={<UserInfo/>}/>
         <Route path="/screen" element={<Screen />} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/room/:roomId" element={<Room />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </main>

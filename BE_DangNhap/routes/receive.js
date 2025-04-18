@@ -12,7 +12,7 @@ const initializeConsumer = async () => {
         await initConsumer((message) => {
             const newMessage = new Message({
                 sender: message.sender,
-                receiver: message.receiver,
+                room: message.room,
                 message: message.message
             });
             newMessage.save()
@@ -27,9 +27,8 @@ router.get('/:receiver', async (req, res) => {
     await initializeConsumer();
     try {
         const { receiver } = req.params;
-        //get from User
         const messages = await Message.findAll({
-            where: {receiver: receiver},
+            where: {room: receiver},
         });          
         res.status(200).json({ messages });
     } catch (error) {
@@ -44,7 +43,7 @@ router.get('/:receiver/:sender', async (req, res) => {
         const { sender, receiver } = req.params;
         //get from User
         const messages = await Message.findAll({
-            where: {receiver: receiver, sender: sender},
+            where: {room: receiver, sender: sender},
         });          
         res.status(200).json({ messages });
     } catch (error) {

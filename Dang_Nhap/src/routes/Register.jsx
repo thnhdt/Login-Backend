@@ -2,6 +2,8 @@ import { useState } from 'react';
 import '../App.css'
 import { Link } from 'react-router-dom';
 
+
+
 function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

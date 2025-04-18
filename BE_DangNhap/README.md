@@ -5,7 +5,7 @@ Sequelize-CLI init:
 Create models
     -npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
 Migrations:
-    create:
+    create: (when want to change a migration)
     -npx sequelize-cli migration:generate --name create-users
     undo:
     -npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX-create-posts.js

@@ -15,20 +15,21 @@ const initializeProducer = async () => {
 
 const Send = async (req, res) => {
   try {
-    const { sender, receiver, message } = req.body;
+    const { sender, room, message } = req.body;
     
-    if (!sender || !receiver || !message) {
+    if (!sender || !room || !message) {
       return res.status(400).json({ message: 'All field are required' });
     }
     // luu o consumer
-    // await Message.create({ sender, receiver, message });
+    // await Message.create({ sender, room, message });
     await initializeProducer();
-    await sendMessage({
+    await sendMessage(room, {
       sender: sender,
-      receiver: receiver,
+      room: room,
       message: message
     });
-
+    console.log(sender, room, message)
+    
     res.status(200).json({ message: 'Message sent successfully' });
   } catch (error) {
     console.error('Error sending message:', error);

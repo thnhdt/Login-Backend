@@ -11,7 +11,6 @@ class User extends Model {
     // }
     static associate(models) {
       User.hasMany(models.Message, { foreignKey: 'sender' , as: 'Sender' });
-      User.hasMany(models.Message, { foreignKey: 'receiver', as: 'Receiver' });
     }
 }
   User.init({

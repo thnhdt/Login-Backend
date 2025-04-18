@@ -8,6 +8,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { createClient } = require("redis");
 const { createAdapter } = require("@socket.io/redis-adapter");
+
 {
 // // Khởi tạo RabbitMQ connections
 // async function initializeRabbitMQ() {
@@ -95,6 +96,16 @@ Promise.all([connectRedis().catch(console.error), subClient.connect()]).then(() 
         socket.on("Rmessage", (msg) => {
             console.log(`R-Received: ${msg}`);
             io.emit("Rmessage", msg);
+        });
+
+        socket.on('joinRoom', (roomName) => {
+          socket.join(roomName);  // Client tham gia phòng với tên 'roomName'
+          console.log(`Socket ${socket.id} joined room: ${roomName}`);
+
+          socket.on('sendMessage', (message) => {
+            console.log(`Sending message to room ${roomName}: ${message}`);
+            io.to(roomName).emit('message', `Client ${socket.id} has joined the room`);
+          });
         });
 
         socket.on("disconnect", () => {

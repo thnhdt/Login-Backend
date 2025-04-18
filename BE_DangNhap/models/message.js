@@ -13,27 +13,16 @@ class Message extends Model {
       Message.belongsTo(models.User, {
         foreignKey: 'sender', as: 'Sent'
       });
-      Message.belongsTo(models.User, {
-        foreignKey:'receiver', as: 'Received'
-      });
     }
 }
 Message.init({
     sender: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'id'
-        }
     },
-    receiver: {
-        type: DataTypes.INTEGER,
+    room: {
+        type: DataTypes.STRING,
         allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'id'
-        }
     },
     message: {
         type: DataTypes.STRING,
