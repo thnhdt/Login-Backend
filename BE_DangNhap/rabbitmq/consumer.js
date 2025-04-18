@@ -13,20 +13,11 @@ async function initConsumer(socketId, room) {
         await channel.assertQueue(queue, { durable: true });
         await channel.bindQueue(queue, exchange, room);
 
-        console.log("CONSUMER initialized for socket:", socketId, "in room:", room);
-
         channel.consume(queue, (msg) => {
             if (msg !== null) {
                 try {
                     const messageContent = JSON.parse(msg.content.toString());
-                    console.log("RECEIVED in room", messageContent.room, ":", messageContent);
-                    
-                    if (messageContent.room === room) {
-                        if (messageContent.sender !== socketId) {
-                            console.log(`Message from ${messageContent.sender} in room ${room}:`, messageContent.message);
-                        }
-                    }
-                    
+                    console.log(`Received in room ${messageContent.room}:`, messageContent);
                     channel.ack(msg);
                 } catch (error) {
                     console.error('Error processing message:', error);

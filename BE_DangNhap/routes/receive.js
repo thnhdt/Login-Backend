@@ -24,12 +24,9 @@ const initializeConsumer = async () => {
 };
 
 router.get('/:receiver', async (req, res) => {
-    await initializeConsumer();
     try {
         const { receiver } = req.params;
-        const messages = await Message.findAll({
-            where: {room: receiver},
-        });          
+        const messages = await Message.findAll({ where: { room: receiver } });
         res.status(200).json({ messages });
     } catch (error) {
         console.error('Error receiving messages:', error);

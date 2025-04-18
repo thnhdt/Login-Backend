@@ -15,21 +15,14 @@ const initializeProducer = async () => {
 
 const Send = async (req, res) => {
   try {
-    const { sender, room, message } = req.body;
-    
+    const { sender, room, message, socketID } = req.body;
     if (!sender || !room || !message) {
-      return res.status(400).json({ message: 'All field are required' });
+      return res.status(400).json({ message: 'All fields are required' });
     }
-    // luu o consumer
-    // await Message.create({ sender, room, message });
     await initializeProducer();
-    await sendMessage(room, {
-      sender: sender,
-      room: room,
-      message: message
-    });
-    console.log(sender, room, message)
-    
+    await Message.create({ sender, room, message });
+    console.log("Lưu tin nhắn từ", sender)
+    await sendMessage(room, { sender, room, message }, socketID);
     res.status(200).json({ message: 'Message sent successfully' });
   } catch (error) {
     console.error('Error sending message:', error);
@@ -38,5 +31,4 @@ const Send = async (req, res) => {
 };
 
 router.post('/', Send);
-
 module.exports = router;

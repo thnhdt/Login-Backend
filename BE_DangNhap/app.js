@@ -9,24 +9,6 @@ const { Server } = require("socket.io");
 const { createClient } = require("redis");
 const { createAdapter } = require("@socket.io/redis-adapter");
 
-{
-// // Khởi tạo RabbitMQ connections
-// async function initializeRabbitMQ() {
-//     await initProducer();
-//     await initConsumer();
-// }
-
-// initializeRabbitMQ();
-
-// setInterval(() => {
-//     const message = { 
-//         orderId: Math.floor(Math.random() * 1000), 
-//         product: "Laptop", 
-//         quantity: 2 
-//     };
-//     sendMessage(message);
-// }, 5000);
-}
 const redisClient = createClient({
   // url: 'redis://redis:6379'  // Sử dụng tên service làm hostname khi dùng docker
 });
@@ -39,11 +21,12 @@ const info = require('./routes/info');
 const send = require('./routes/send');
 const receive = require('./routes/receive');
 const dotenv = require('dotenv');
+const { setIO } = require('./rabbitmq/producer');
 // const connectDB = require('./model/db');
 dotenv.config();
 const PORT = process.env.PORT || 3001;
 const { Sequelize } = require("sequelize");
-// const sequelize = new Sequelize(process.env.POSTGRES_URI);
+// const sequelize = new Sequelize(process.env.POSTGRES_URI); //Using URI
 const sequelize = new Sequelize("postgres", "postgres", "thnhdt", {
   // host: "localhost",
   host: "db.disswnqpbzsaxxybflxo.supabase.co",
@@ -70,6 +53,8 @@ const io = new Server(httpServer, {
         credentials: true
     }
 });
+
+setIO(io);
 
 const connectRedis = async () => {
   const maxRetries = 5;
