@@ -1,36 +1,45 @@
 const amqp = require('amqplib');
+let ioInstance = null;
 
-let channel = null;
-const exchange = 'message';
+function setIO(io) {
+    ioInstance = io;
+}
 
 async function initConsumer(socketId, room) {
     try {
         const connection = await amqp.connect('amqp://localhost');
-        channel = await connection.createChannel();
-        const queue = `queue_${socketId}`;
-
-        await channel.assertExchange(exchange, 'topic', { durable: true });
+        const channel = await connection.createChannel();
+        
+        await channel.assertExchange('message', 'topic', { durable: true });
+        const queue = `queue_${socketId}_${room}`;
+        
         await channel.assertQueue(queue, { durable: true });
-        await channel.bindQueue(queue, exchange, room);
-
+        await channel.bindQueue(queue, 'message', room);
+        console.log("1");
+        
         channel.consume(queue, (msg) => {
-            if (msg !== null) {
+            if (msg) {
                 try {
-                    const messageContent = JSON.parse(msg.content.toString());
-                    console.log(`Received in room ${messageContent.room}:`, messageContent);
+                    const content = JSON.parse(msg.content.toString());
+                    if (ioInstance) {
+                        ioInstance.to(room).emit('receiveMessage', content);
+                    } else {
+                        console.error('Socket.IO instance is not initialized');
+                    }
+                    console.log(`[${room}] Received:`, content);
                     channel.ack(msg);
-                } catch (error) {
-                    console.error('Error processing message:', error);
-                    channel.nack(msg, false, false);
+                } catch (err) {
+                    console.error('Message parse error:', err);
+                    channel.nack(msg);
                 }
             }
         }, { noAck: false });
-
+        
         return true;
-    } catch (error) {
-        console.error('Consumer initialization error:', error);
-        throw error;
+    } catch (err) {
+        console.error('Consumer error:', err);
+        throw err;
     }
 }
 
-module.exports = { initConsumer };
+module.exports = { initConsumer, setIO };

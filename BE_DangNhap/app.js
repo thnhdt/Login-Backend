@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
-// Initial
 
 //socket io-http server + redis
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const { createClient } = require("redis");
 const { createAdapter } = require("@socket.io/redis-adapter");
+const { initConsumer } = require("./rabbitmq/consumer")
 
 const redisClient = createClient({
   // url: 'redis://redis:6379'  // Sử dụng tên service làm hostname khi dùng docker
@@ -21,7 +21,7 @@ const info = require('./routes/info');
 const send = require('./routes/send');
 const receive = require('./routes/receive');
 const dotenv = require('dotenv');
-const { setIO } = require('./rabbitmq/producer');
+const { setIO } = require('./rabbitmq/consumer');
 // const connectDB = require('./model/db');
 dotenv.config();
 const PORT = process.env.PORT || 3001;
@@ -84,7 +84,8 @@ Promise.all([connectRedis().catch(console.error), subClient.connect()]).then(() 
         });
 
         socket.on('joinRoom', (roomName) => {
-          socket.join(roomName);  // Client tham gia phòng với tên 'roomName'
+          initConsumer(socket.id, roomName);
+          socket.join(roomName);
           console.log(`Socket ${socket.id} joined room: ${roomName}`);
 
           socket.on('sendMessage', (message) => {
